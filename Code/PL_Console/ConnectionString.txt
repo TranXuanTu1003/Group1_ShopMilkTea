@@ -1,0 +1,1 @@
+server=localhost;user id=root;password=cayiula1103;port=3306;database=QuanLyBanTraSua;SslMode=None;

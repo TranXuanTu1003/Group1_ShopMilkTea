@@ -23,7 +23,6 @@ namespace Persistence.MODEL
         public DateTime? OrderPaidDate { get; set; }
         public Item OrderItem ;
         public List<Item> ListItems;
-
         public int Count { get; set; }
     }
 }

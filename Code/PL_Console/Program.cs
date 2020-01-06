@@ -1,5 +1,5 @@
 ﻿using System;
-
+using Persistence.MODEL;
 namespace PL_Console
 {
     class Program
@@ -8,7 +8,7 @@ namespace PL_Console
         {
             Menu menu = new Menu();
             menu.Program();
-            // dsakndaskndkasndkajndkjasdnkajsndkjan
+            
         }
 
     }
