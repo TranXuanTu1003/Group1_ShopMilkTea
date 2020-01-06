@@ -4,19 +4,22 @@ create database if not exists QuanLyBanTraSua;
 use QuanLyBanTraSua;
 
 create table if not exists Users(
-	userID int primary key unique,
-    userName nvarchar(100) not null,
+	userID int primary key unique auto_increment,
+    userName nvarchar(100) not null unique,
+    userAccount nvarchar(100) not null,
     userPassWord nvarchar(100) not null,
     userEmail nvarchar(100) not null unique,
     userPhoneNumber nvarchar(20) not null,
     userBirthday datetime not null ,
-    userGender nvarchar(10) not null check(userGender in ('MALE', 'FEMALE', 'Unknown'))
+    userGender nvarchar(10) not null check(userGender in ('MALE', 'FEMALE')),
+    UserShoppingCart bool default false
 );
 
-insert into Users(userID, userName, userPassWord, userEmail, userPhoneNumber, userBirthday, userGender)
-values('10101', 'Adimin', 'e00cf25ad42683b3df678c61f42c6bda', 'trantu10032000@gmail.com','0334064778','2000-10-03','Male'),
-	  ('1011', 'Adimin2', 'c84258e9c39059a89ab77d846ddab909', 'trantu1003@gmail.com','099923232','2000-02-15','Unknown'),
-	  ('10102', 'tu', '123456', 'trantu2000@gmail.com','0583653653','2000-01-01','FEMALE');
+insert into Users(userName, userAccount, userPassWord, userEmail, userPhoneNumber, userBirthday, userGender)
+values
+-- ('Adimin', 'e00cf25ad42683b3df678c61f42c6bda', 'trantu10032000@gmail.com','0334064778','2000-10-03','Male'),
+-- ('Adimin2', 'c84258e9c39059a89ab77d846ddab909', 'trantu1003@gmail.com','099923232','2000-02-15','Unknown'),
+('tu', 'Tran Xuan Tu', '123456', 'trantu2000@gmail.com','0583653653','2000-01-01','FEMALE');
 
 
 create table if not exists Items(
@@ -134,28 +137,32 @@ values	  ('SỮA TƯƠI CHÂN TRÂU ĐƯỜNG HỔ ','FRESH MILK TRAVEL SUGAR LA
 create table if not exists Orders(
 	orderID int primary key unique,
     orderUser int not null,
+    cartStatus int,
     orderDate datetime not null,
-    orderPaidDate datetime not null,
     constraint fk_Orders_Users foreign key(orderUser) references Users(userID)
 );
 
+
+
+select orderID from Orders where orderUser = 2 order by orderID  desc limit 1 ;
 create table if not exists OrderDetails(
 	orderID int,
     itemID int,
-    count int not null check(count >= 0),
     constraint primary key(orderID, itemID),
     constraint fk_OrderDetails_Orders foreign key(orderID) references Orders(orderID),
     constraint fk_OrderDetails_Items foreign key(itemID) references Items(itemID)
 );
 
-create table if not exists itemDetails(
+select orderID from Orders where orderUser = 1 order by orderID desc limit 1;
+
+create table if not exists ItemDetails(
 	itemID int,
     itemSize nvarchar(10) not null, -- size M and L
-	itemPrice float check(itemPrice > 0) not null,
+	itemPrice double check(itemPrice > 0) not null,
     constraint fk_itemDetails_Items foreign key(itemID) references Items(itemID)
 );
 
-insert into itemDetails(itemID,itemSize,itemPrice)
+insert into ItemDetails(itemID,itemSize,itemPrice)
 values  
 ('1','M','10000'),
 ('1','L','20000'),
@@ -363,3 +370,27 @@ select * from Items;
 select * from Orders;
 select * from itemDetails;
 select * from OrderDetails;
+select * from Orders where orderUser = 1 order by orderID desc limit 1;
+select * from OrderDetails where itemID = 1;
+select cartStatus from Orders ord inner join OrderDetails ordls on ord.orderID = ordls.orderID where orderUser = 1;
+select ord.orderID, ord.orderDate, it.itemName from Orders ord inner join OrderDetails ordls on ord.orderID = ordls.orderID inner join Items it on ordls.itemID = it.itemID where ord.orderUser = 1 and ord.cartStatus = 1;
+select orderID from Orders order by orderID desc limit 1;
+
+use QuanLyBanTraSua;
+
+create user if not exists 'root'@'localhost' identified by 'cayiula1103';
+grant all on Users to 'root'@'localhost';
+grant all on Items to 'root'@'localhost';
+grant all on Orders to 'root'@'localhost';
+grant all on OrderDetails to 'root'@'localhost';
+grant lock tables on QuanLyBanTraSua.* to 'root'@'localhost';
+select * from Users where userName = 'tu' and userPassWord = '123456';
+select * from Users where userName = 'tu' or userEmail = 'trantu2000@gmail.com' or userPhoneNumber = '0583653653';
+        
+-- lock tables Orders write, Items write, OrderDetails write;
+-- unlock tables
+--  select max(orderID) as orderID from Orders where orderUser order by orderID desc limit 1;
+-- select it.itemID, it.itemName, ord.orderDate from Orders ord inner join orderDetails ordls on ord.orderID = ordls.orderID 
+--                        inner join Items it on ordls.itemID = it.itemID where ord.orderUser and ord.cartStatus = 1 group by it.itemName;
+
+-- select * from Users where userName  and userPassWord;

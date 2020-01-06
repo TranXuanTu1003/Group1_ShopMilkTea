@@ -5,34 +5,40 @@ using MySql.Data.MySqlClient;
 
 namespace DAL
 {
-    public class DbHelper
+    public class DBHelper
     {
-        
-        private static MySqlConnection connection;
+
+        private static MySqlConnection connection = null;
 
         public static MySqlConnection OpenConnection()
         {
-            if (connection == null)
+            try
             {
-                connection = new MySqlConnection
+                string connectionString;
+
+                FileStream fileStream = File.OpenRead("ConnectionString.txt");
+                using (StreamReader reader = new StreamReader(fileStream))
                 {
-                    ConnectionString = @"server=localhost;
-                                    userid=root;
-                                    password=cayiula1103;
-                                    port=3306;
-                                    database=QuanLyBanTraSua;"
-                };
+                    connectionString = reader.ReadLine();
+                }
+                fileStream.Close();
+
+                return OpenConnection(connectionString);
             }
-            return connection;
+            catch (System.Exception ex)
+            {
+                Console.WriteLine(ex.Message);
+                return null;
+            }
         }
 
-        public static MySqlConnection OpenConnection(string connectionString)
+        public static MySqlConnection OpenConnection(string connection_String)
         {
             try
             {
                 MySqlConnection connection = new MySqlConnection
                 {
-                    ConnectionString = connectionString
+                    ConnectionString = connection_String
                 };
                 connection.Open();
                 return connection;
@@ -47,7 +53,7 @@ namespace DAL
         {
             if (connection != null)
             {
-                connection.Clone();
+                connection.Close();
             }
         }
 

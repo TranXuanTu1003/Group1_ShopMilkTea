@@ -4,7 +4,7 @@ namespace Persistence.MODEL{
     public class Item{
         public Item(){}
 
-        public Item(int? itemID,string itemName,string itemNameEnglish,int itemQuantity,string itemDescription,string itemPreview,string itemResources,string itemSize,float itemPrice){
+        public Item(int? itemID,string itemName,string itemNameEnglish,int itemQuantity,string itemDescription,string itemPreview,string itemResources,string itemSize,double itemPrice){
             this.ItemID = itemID;
             this.ItemName = itemName;
             this.ItemNameEnglish = itemNameEnglish;
@@ -24,6 +24,6 @@ namespace Persistence.MODEL{
         public string ItemPreview{get;set;}
         public string ItemResources{get;set;}
         public string ItemSize{get;set;}
-        public float ItemPrice{get;set;}
+        public double ItemPrice{get;set;}
     }
 }
