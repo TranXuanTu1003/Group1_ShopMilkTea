@@ -9,12 +9,12 @@ namespace DAL
     {
         private MySqlDataReader reader;
         private string query;
-        // public ItemDAL() { }
+        public ItemDAL() { }
         public List<Item> SearchItemName()
         {
             DBHelper.OpenConnection();
             // query = $@"select * from Items limit 10;";
-            query = $@"select it.itemID, it.itemName, itdls.itemSize, it.itemPrice, it.itemPreview, it.itemResources, it.itemQuantity, it.itemDescription from Items it, ItemDetails itdls where it.itemID = itdls.itemID ; ";
+            query = $@"select it.itemID, it.itemName, it.itemNameEnglish, itdls.itemSize, itdls.itemPrice, it.itemPreview, it.itemResources, it.itemQuantity, it.itemDescription from Items it, ItemDetails itdls where it.itemID = itdls.itemID ; ";
             List<Item> items = new List<Item>();
             try
             {
@@ -37,7 +37,7 @@ namespace DAL
         {
             DBHelper.OpenConnection();
             // query = $@"select * from Items;";
-            query = $@"select it.itemID, it.itemName, itdls.itemSize, itdls.itemPrice, it.itemPreview, it.itemResources, it.itemQuantity, it.itemDescription from Items it, ItemDetails itdls where it.itemID = itdls.itemID limit 10; ";
+            query = $@"select it.itemID, it.itemName, it.itemNameEnglish, itdls.itemSize, itdls.itemPrice, it.itemPreview, it.itemResources, it.itemQuantity, it.itemDescription from Items it, ItemDetails itdls where it.itemID = itdls.itemID limit 10; ";
             List<Item> items = new List<Item>();
             try
             {
@@ -63,7 +63,7 @@ namespace DAL
                 return null;
             }
 
-            query = $@"select it.itemID, it.itemName, it.itemQuantity, it.itemDescription, it.itemPreview, it.itemResources ,itdt.itemSize, itdt.itemPrice from Items it, ItemDetails itdl where it.itemID = " + itemID + ";";
+            query = $@"select it.itemID, it.itemName, it.itemNameEnglish, it.itemQuantity, it.itemDescription, it.itemPreview, it.itemResources ,itdls.itemSize, itdls.itemPrice from Items it, ItemDetails itdls where it.itemID = " + itemID + ";";
             // query = $"select * from Items where itemID = {itemID}";
             reader = DBHelper.ExecQuery(query, DBHelper.OpenConnection());
             Item item = null;
@@ -82,7 +82,7 @@ namespace DAL
             {
                 case 1:
                     // query = $@"select * from Items where itemID = ";
-                    query = $@"select it.itemID, it.itemName, it.itemQuantity, it.itemDescription, it.itemPreview, it.itemResources ,itdt.itemSize, itdt.itemPrice, from Items it, ItemDetails itdl where itemID = ;";
+                    query = $@"select it.itemID, it.itemName, it.itemNameEnglish, it.itemQuantity, it.itemDescription, it.itemPreview, it.itemResources ,itdls.itemSize, itdls.itemPrice, from Items it, ItemDetails itdls where itemID = ;";
 
                     break;
             }
@@ -102,9 +102,9 @@ namespace DAL
             Item item = new Item();
             item.ItemID = reader.GetInt32("itemID");
             item.ItemName = reader.GetString("itemName");
-            // item.ItemNameEnglish = reader.GetString("itemNameEnglish");
+            item.ItemNameEnglish = reader.GetString("itemNameEnglish");
             item.ItemPreview = reader.GetString("itemPreview");
-            item.ItemPrice = reader.GetDouble("itemPrice");
+            item.ItemPrice = reader.GetInt32("itemPrice");
             item.ItemQuantity = reader.GetInt32("itemQuantity");
             item.ItemSize = reader.GetString("itemSize");
             item.ItemResources = reader.GetString("itemResources");

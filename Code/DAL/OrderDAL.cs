@@ -316,20 +316,20 @@ namespace DAL{
             return orderID;
         }
 
-        // public int? CheckItemPurchase(int? itemID, int? userID){
-        //     string query = $@"select it.itemID from Orders ord inner join orderDetails ordls on ord.orderID = ordls.orderID
-        //                      where it.itemID = {itemID} and ord.orderUser = {userID} and ord.cartStatus = 1 limit 1;";
+        public int? CheckItemPurchase(int? itemID, int? userID){
+            string query = $@"select it.itemID from Orders ord inner join OrderDetails ordls on ord.orderID = ordls.orderID
+                             where it.itemID = {itemID} and ord.orderUser = {userID} and ord.cartStatus = 1 limit 1;";
                             
-        //     reader = DBHelper.ExecQuery(query, DBHelper.OpenConnection());
-        //     if(reader.Read()){
-        //         itemID = reader.GetInt32("itemID");
-        //     }
-        //     else{
-        //         itemID = -1;
-        //     }
-        //     reader.Close();
-        //     return itemID;
-        // }
+            reader = DBHelper.ExecQuery(query, DBHelper.OpenConnection());
+            if(reader.Read()){
+                itemID = reader.GetInt32("itemID");
+            }
+            else{
+                itemID = -1;
+            }
+            reader.Close();
+            return itemID;
+        }
 
         private Item GetItemShoppingCart(MySqlDataReader reader){
             Item item = new Item();
@@ -357,7 +357,6 @@ namespace DAL{
             order.OrderID = reader.GetInt32("itemID");
             order.OrderUser.UserName = reader.GetString("userName");
             order.OrderUser.UserEmail = reader.GetString("userEmail");
-
             order.OrderItem.ItemID = reader.GetInt32("itemID");
             order.OrderItem.ItemPrice = reader.GetDouble("itemPrice");
             order.OrderDate = reader.GetDateTime("orderDate");

@@ -51,9 +51,9 @@ namespace BL{
             return orderDAL.DeleteAllItemInShoppingCartByUserID(userID);
         }
 
-        // public int? CheckItemPurchase(int? itemID, int? userID){
-        //     return orderDAL.CheckItemPurchase(itemID, userID);
-        // }
+        public int? CheckItemPurchase(int? itemID, int? userID){
+            return orderDAL.CheckItemPurchase(itemID, userID);
+        }
 
     }
 }
