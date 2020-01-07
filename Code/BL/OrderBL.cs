@@ -27,7 +27,7 @@ namespace BL{
         public List<Item> ShowShoppingCartByUserID(int? userID){
             return orderDAL.ShowShoppingCartByUserID(userID);
         }
-        
+
         public bool CreateOrder(Order order){
             return orderDAL.CreateOrder(order);
         }
@@ -51,9 +51,9 @@ namespace BL{
             return orderDAL.DeleteAllItemInShoppingCartByUserID(userID);
         }
 
-        public int? CheckItemPurchase(int? itemID, int? userID){
-            return orderDAL.CheckItemPurchase(itemID, userID);
-        }
+        // public int? CheckItemPurchase(int? itemID, int? userID){
+        //     return orderDAL.CheckItemPurchase(itemID, userID);
+        // }
 
     }
 }

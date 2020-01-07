@@ -17,7 +17,7 @@ namespace DAL{
             MySqlConnection connection = DBHelper.OpenConnection();
             MySqlCommand command = connection.CreateCommand();
 
-            command.CommandText = @"lock tables Orders write, Items write, OrderDetails write, itemDetails write";
+            command.CommandText = @"lock tables Orders write, Items write, OrderDetails write, ItemDetails write";
             command.ExecuteNonQuery();
 
             MySqlTransaction transaction = connection.BeginTransaction();
@@ -25,12 +25,12 @@ namespace DAL{
 
             try
             {
-                command.CommandText = "insert into Orders(orderUser, cartStatus) values(@userId,@CartStatus)";
+                command.CommandText = "insert into Orders(orderUser, cartStatus) values(@userID,@CartStatus);";
                 command.Parameters.AddWithValue("@userID",order.OrderUser.UserID);
                 command.Parameters.AddWithValue("@CartStatus", order.CartStatus);
                 command.ExecuteNonQuery();
 
-                string queryLastInsertID = $@"select orderID from orders where orderUser = {order.OrderUser.UserID} order by orderid desc limit 1;";
+                string queryLastInsertID = $@"select orderID from Orders where orderUser = {order.OrderUser.UserID} order by orderID desc limit 1;";
                 MySqlCommand selectLastID = new MySqlCommand(queryLastInsertID, connection);
                 using (reader = selectLastID.ExecuteReader())
                 {
@@ -40,7 +40,7 @@ namespace DAL{
                 }
 
                 command.Parameters.Clear();
-                command.CommandText = "insert into OrderDetails(orderID, itemID) values (@orderID, @itemID)";
+                command.CommandText = "insert into OrderDetails(orderID, itemID) values (@orderID, @itemID);";
                 command.Parameters.AddWithValue("@orderID", order.OrderID);
                 command.Parameters.AddWithValue("@itemID",order.OrderItem.ItemID);
                 command.ExecuteNonQuery();
@@ -75,7 +75,7 @@ namespace DAL{
             MySqlTransaction transaction = connection.BeginTransaction();
             command.Transaction = transaction;
 
-            string queryLastInsertID = $@"select orderID from orders where orderUser = {order.OrderUser.UserID} order by orderid desc limit 1;";
+            string queryLastInsertID = $@"select orderID from Orders where orderUser = {order.OrderUser.UserID} order by orderID desc limit 1;";
             MySqlCommand selectLastID = new MySqlCommand(queryLastInsertID, connection);
             using (reader = selectLastID.ExecuteReader())
             {
@@ -85,7 +85,7 @@ namespace DAL{
             }
             try
             {
-                command.CommandText = "insert into OrderDetails(orderID,itemID) values (@orderID, @itemID)";
+                command.CommandText = "insert into OrderDetails(orderID,itemID) values (@orderID, @itemID);";
                 command.Parameters.AddWithValue("@orderID", order.OrderID);
                 command.Parameters.AddWithValue("@itemID",order.OrderItem.ItemID);
                 command.ExecuteNonQuery();
@@ -110,7 +110,7 @@ namespace DAL{
             if(itemID == null){
                 return false;
             }
-            query = $@"delete from orderDetails where itemID = {itemID}; ";
+            query = $@"delete from OrderDetails where itemID = {itemID}; ";
 
             MySqlConnection connection = DBHelper.OpenConnection();
             if(DBHelper.ExecNonQuery(query, connection) == 0){
@@ -143,7 +143,11 @@ namespace DAL{
                     }
                 }
                 command.Parameters.Clear();
-                command.CommandText = $@"delete from OrderDetails where orderID = {orderID}";
+                command.CommandText = $@"delete from OrderDetails where orderID = {orderID};";
+                command.ExecuteNonQuery();
+
+                command.Parameters.Clear();
+                command.CommandText = $@"delete from Orders where orderID = {orderID};";
                 command.ExecuteNonQuery();
 
                 transaction.Commit();
@@ -171,8 +175,10 @@ namespace DAL{
             }
 
             List<Item> listItems = new List<Item>();
-            query = $@"select it.itemID, it.itemName, it.itemPrice from Orders ords inner join orderDetails ordls on ords.orderID = ordls.orderID 
-                       inner join Items it on ordls.itemID = it.itemID where ord.orderUser = {userID} and ord.cartStatus = 0 ;";
+            query = $@"select it.itemID, it.itemName, itdls.itemPrice from Orders ord inner join OrderDetails ordls on ord.orderID = ordls.orderID 
+                       inner join Items it on ordls.itemID = it.itemID 
+                       inner join ItemDetails itdls on itdls.itemID = it.itemID
+                       where ord.orderUser = {userID} and ord.cartStatus = 0 ;";
             
             try
             {
@@ -180,7 +186,7 @@ namespace DAL{
             }
             catch (System.Exception)
             {
-                Console.WriteLine("Không thể kết nối với cơ sở dữ liệu !!!");
+                Console.WriteLine("Không thể kết nối với cơ sở dữ liệu !!!.");
                 return null;
             }
             while (reader.Read())
@@ -199,6 +205,7 @@ namespace DAL{
             MySqlConnection connection = DBHelper.OpenConnection();
             MySqlCommand command = connection.CreateCommand();
             command.CommandText = @"lock tables Users write, Orders write, Items write, OrderDetails write, ItemDetails write";
+            command.ExecuteNonQuery();
             MySqlTransaction transaction = connection.BeginTransaction();
             command.Transaction = transaction;
 
@@ -213,7 +220,7 @@ namespace DAL{
                 }
 
                 command.Parameters.Clear();
-                command.CommandText = $@"update Orders set cartStatus = 1, orderDate = now() where orderUser = {order.OrderUser.UserID} and orderID = {order.OrderID};";
+                command.CommandText = $@"update Orders set cartStatus = 1, orderDate = NOW() where orderUser = {order.OrderUser.UserID} and orderID = {order.OrderID};";
                 command.ExecuteNonQuery();
 
                 transaction.Commit();
@@ -240,12 +247,12 @@ namespace DAL{
                 return null;
             }
             List<Order> listOrders = new List<Order>();
-            query = $@"select it.itemID, it.itemName, ord.orderDate from Orders ord inner join orderDetails ordls on ord.orderID = ordls.orderID 
-                       inner join Items it on ordls.itemID = it.itemID where ord.orderUser = {userID} and ord.cartStatus = 1 group by it.itemName";
+            query = $@"select it.itemID, it.itemName, ord.orderDate from Orders ord inner join OrderDetails ordls on ord.orderID = ordls.orderID 
+                       inner join Items it on ordls.itemID = it.itemID where ord.orderUser = {userID} and ord.cartStatus = 1 group by it.itemName ;";
 
             try
             {
-                reader =DBHelper.ExecQuery(query, DBHelper.OpenConnection());
+                reader = DBHelper.ExecQuery(query, DBHelper.OpenConnection());
             }
             catch (System.Exception)
             {
@@ -266,7 +273,7 @@ namespace DAL{
             }
 
             Order order = null;
-            query =$@"select max(orderID) from Orders where orderUser = {userID} ";
+            query =$@"select max(orderID) from Orders where orderUser = {userID} ;";
             reader = DBHelper.ExecQuery(query, DBHelper.OpenConnection());
             if(reader.Read()){
                 order = GetOrder(reader);
@@ -285,7 +292,7 @@ namespace DAL{
             query = $@"select ord.orderID as orderID, ord.orderDate, it.itemID, it.itemName, it.itemPrice, us.userName, us.userEmail from
                        Users us inner join Orders ord on ord.orderUser = us.userID inner join orderDetails ordls on ord.orderID = ordls.orderID
                        inner join Items it on ordls.itemID = it.itemID
-                       where ord.orderUser = {userID} and ord.orderID = {GetLastInsertOrderID(userID)}";
+                       where ord.orderUser = {userID} and ord.orderID = {GetLastInsertOrderID(userID)} ;";
 
             reader = DBHelper.ExecQuery(query, DBHelper.OpenConnection());
             while (reader.Read())
@@ -300,7 +307,7 @@ namespace DAL{
         public int GetLastInsertOrderID(int? userID){
             int orderID = -1;
 
-            string queryLastInsertID = $@"select orderID from where orderUser = {userID} order by orderID desc limit 1;";
+            string queryLastInsertID = $@"select orderID from Orders where orderUser = {userID} order by orderID desc limit 1;";
             reader = DBHelper.ExecQuery(queryLastInsertID, DBHelper.OpenConnection());
             if(reader.Read()){
                 orderID = reader.GetInt32("orderID");
@@ -309,20 +316,20 @@ namespace DAL{
             return orderID;
         }
 
-        public int? CheckItemPurchase(int? itemID, int? userID){
-            string query = $@"select it.itemID from Orders ord inner join orderDetails ordls on ord.orderID = ordls.orderID
-                             where it.itemID = {itemID} and ord.orderUser = {userID} and ord.cartStatus = 1 limit 1;";
+        // public int? CheckItemPurchase(int? itemID, int? userID){
+        //     string query = $@"select it.itemID from Orders ord inner join orderDetails ordls on ord.orderID = ordls.orderID
+        //                      where it.itemID = {itemID} and ord.orderUser = {userID} and ord.cartStatus = 1 limit 1;";
                             
-            reader = DBHelper.ExecQuery(query, DBHelper.OpenConnection());
-            if(reader.Read()){
-                itemID = reader.GetInt32("itemID");
-            }
-            else{
-                itemID = -1;
-            }
-            reader.Close();
-            return itemID;
-        }
+        //     reader = DBHelper.ExecQuery(query, DBHelper.OpenConnection());
+        //     if(reader.Read()){
+        //         itemID = reader.GetInt32("itemID");
+        //     }
+        //     else{
+        //         itemID = -1;
+        //     }
+        //     reader.Close();
+        //     return itemID;
+        // }
 
         private Item GetItemShoppingCart(MySqlDataReader reader){
             Item item = new Item();
