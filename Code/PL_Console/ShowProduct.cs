@@ -68,7 +68,7 @@ namespace PL_Console
                     case 5:
                         break;
                 }
-                break; 
+                break;
 
             }
         }
@@ -76,12 +76,14 @@ namespace PL_Console
         public void ShowInfoCustomer(User us)
         {
 
+
             Console.WriteLine("===========================================\n");
             Console.WriteLine("Thông tin tài khoản\n");
             Console.WriteLine("===========================================\n");
             string[] listinfo = { "Display Name", "User Name", "Email", "SDT", "Birth Date", "Gender" };
 
             Extend.InfoCustomer("Thông tin tài khoản", listinfo, us);
+
         }
         public void ShowListItems()
         {
@@ -97,15 +99,15 @@ namespace PL_Console
                 while (true)
                 {
                     int? ItemID;
-                    string[] listcol = { "Chon san pham", "Tim kiem", "Exit" };
-                    int choice = Extend.ShowListItems("Danh sach Tra Sua", listcol, items, user.UserID);
+                    string[] listcol = { "Chọn sản phẩm", "Tìm kiếm", "Hiển thị thêm sản phẩm", "Thoát" };
+                    int choice = Extend.ShowListItems("Danh sách đồ uống", listcol, items, user.UserID);
                     switch (choice)
                     {
                         case 1:
                             if (items.Count <= 0)
                             {
-                                Console.WriteLine("Chua co san pham");
-                                Console.WriteLine("Nhan phim bat ki de hien thi danh sach Tra Sua");
+                                Console.WriteLine("Chưa có sản phẩm");
+                                Console.WriteLine("Nhấn phím bất kì để hiển thị danh sách đồ uống");
                                 Console.ReadKey();
                                 items = itemBL.GetListItems();
                             }
@@ -116,13 +118,16 @@ namespace PL_Console
                             }
                             continue;
                         case 2:
-                            Console.Write("Nhap ten san pham: ");
+                            Console.Write("Nhập tên sản phẩm: ");
                             Console.InputEncoding = Encoding.Unicode;
                             Console.OutputEncoding = Encoding.Unicode;
                             string itemName = Console.ReadLine();
                             items = itemBL.SearchItemName(itemName);
                             continue;
                         case 3:
+                            Console.WriteLine("Chức năng đang phát triển");
+                            continue;
+                        case 4: 
                             break;
 
                     }
@@ -140,14 +145,15 @@ namespace PL_Console
                 item = itemBL.GetItemByID(ItemID);
 
                 var table = new ConsoleTable("Name", Convert.ToString(item.ItemName));
-                // table.AddRow("Name English: ", item.ItemNameEnglish);
+                table.AddRow("Name English: ", item.ItemNameEnglish);
                 table.AddRow("Price: ", FormatCurrency(item.ItemPrice));
                 table.AddRow("Size: ", item.ItemSize);
-                table.AddRow("Preview: ", item.ItemPreview);
+                // table.AddRow("Preview: ", item.ItemPreview);
                 table.AddRow("Resources: ", item.ItemResources);
-                table.AddRow("Quantity: ", item.ItemQuantity);
+                // table.AddRow("Quantity: ", item.ItemQuantity);
                 table.Write();
                 Console.WriteLine();
+
 
                 OrderBL orderBL = new OrderBL();
                 string[] choice = { "Add To Cart", "Exit" };
@@ -209,7 +215,7 @@ namespace PL_Console
 
                     throw;
                 }
-                
+
             }
             Console.WriteLine("Nhan phim bat ki de tiep tuc");
             Console.ReadKey();

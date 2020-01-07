@@ -15,6 +15,7 @@ namespace PL_Console
     {
         public static void InfoCustomer(string title, string[] menuItems, User us)
         {
+            Console.Clear(); 
             Console.WriteLine("===========================================");
             Console.WriteLine(title);
             Console.WriteLine("===========================================");
@@ -22,7 +23,7 @@ namespace PL_Console
             string[] infoUser = { us.UserAccount, us.UserName, us.UserEmail, us.UserPhoneNumber, us.UserBirthday.ToString(), us.UserGender };
 
             var table = new ConsoleTable("DisplayName", us.UserAccount);
-            table.AddRow("UserName", us.UserName);
+            table.AddRow("UserNames", us.UserName);
             table.AddRow("Email", us.UserEmail);
             table.AddRow("PhoneNumber", us.UserPhoneNumber);
             table.AddRow("Birth Date", us.UserBirthday);
@@ -39,12 +40,12 @@ namespace PL_Console
         {
             Console.Clear();
             short choice = -1;
-            var table = new ConsoleTable("itemID", "itemName", "itemNameEnglish", "itemPrice", "itemSize", "itemPreview", "itemResources");
             OrderBL orderBL = new OrderBL();
 
+            var table = new ConsoleTable("itemID", "itemName", "itemPrice", "itemSize", "itemResources"); // "itemNameEnglish",item.ItemNameEnglish,
             foreach (Item item in items)
             {
-                table.AddRow(item.ItemID, item.ItemName, item.ItemNameEnglish, FormatCurrency(item.ItemPrice), item.ItemSize, item.ItemPreview, item.ItemResources);
+                table.AddRow(item.ItemID, item.ItemName, FormatCurrency(item.ItemPrice), item.ItemSize, item.ItemResources);
             }
 
             table.Write();
@@ -129,7 +130,7 @@ namespace PL_Console
             bool isHave = false;
             try
             {
-                Console.Write("Please enter ItemID: ");
+                Console.Write("Nhập ID sản phẩm: ");
 
                 ItemID = Int16.Parse(Console.ReadLine());
             }

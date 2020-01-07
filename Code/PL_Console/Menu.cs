@@ -124,6 +124,7 @@ namespace PL_Console
                         }
                     }
                 }
+               
                 user = userBL.GetUserByUserNameAndPassword(username, password);
 
                 if (user == null)
