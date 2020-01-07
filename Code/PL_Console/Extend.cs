@@ -15,9 +15,9 @@ namespace PL_Console
     {
         public static void InfoCustomer(string title, string[] menuItems, User us)
         {
-            Console.WriteLine("=============================");
+            Console.WriteLine("===========================================");
             Console.WriteLine(title);
-            Console.WriteLine("=============================");
+            Console.WriteLine("===========================================");
 
             string[] infoUser = { us.UserAccount, us.UserName, us.UserEmail, us.UserPhoneNumber, us.UserBirthday.ToString(), us.UserGender };
 
@@ -29,7 +29,7 @@ namespace PL_Console
             table.AddRow("Gender", us.UserGender);
 
             table.Write();
-            Console.WriteLine("=============================");
+            Console.WriteLine("===========================================");
             Console.Write("Nhấn phím bất kì để quay lại ");
             Console.ReadKey();
 
@@ -50,7 +50,7 @@ namespace PL_Console
             table.Write();
             if (items.Count <= 0)
             {
-                Console.WriteLine("Not found items");
+                Console.WriteLine("No product information found");
             }
             ItemBL itemBL = new ItemBL();
 

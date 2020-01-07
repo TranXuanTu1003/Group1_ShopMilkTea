@@ -68,6 +68,7 @@ namespace PL_Console
                     case 5:
                         break;
                 }
+                break; 
 
             }
         }
@@ -134,12 +135,12 @@ namespace PL_Console
         {
             while (true)
             {
-                Console.Clear();
+                // Console.Clear();
                 Item item = new Item();
                 item = itemBL.GetItemByID(ItemID);
 
                 var table = new ConsoleTable("Name", Convert.ToString(item.ItemName));
-                table.AddRow("Name English: ", item.ItemNameEnglish);
+                // table.AddRow("Name English: ", item.ItemNameEnglish);
                 table.AddRow("Price: ", FormatCurrency(item.ItemPrice));
                 table.AddRow("Size: ", item.ItemSize);
                 table.AddRow("Preview: ", item.ItemPreview);
@@ -208,9 +209,10 @@ namespace PL_Console
 
                     throw;
                 }
-                Console.WriteLine("Nhan phim bat ki de tiep tuc");
-                Console.ReadKey();
+                
             }
+            Console.WriteLine("Nhan phim bat ki de tiep tuc");
+            Console.ReadKey();
         }
 
         public void DeleteItems(Item item)
@@ -232,7 +234,7 @@ namespace PL_Console
         {
             while (true)
             {
-                Console.Clear();
+                // Console.Clear();
                 OrderBL orderBL = new OrderBL();
                 List<Item> shoppingCart = new List<Item>();
                 shoppingCart = orderBL.ShowShoppingCartByUserID(user.UserID);
@@ -256,7 +258,7 @@ namespace PL_Console
                     foreach (var item in shoppingCart)
                     {
                         total = total + (double)item.ItemPrice;
-                        table.AddRow(item.ItemID, item.ItemName, FormatCurrency(item.ItemPrice)); // size
+                        table.AddRow(item.ItemID, item.ItemName, FormatCurrency(item.ItemPrice)); // size chua co
 
                     }
                     table.AddRow("", "", "");
@@ -327,7 +329,7 @@ namespace PL_Console
             {
                 if (orderBL.CreateOrder(order))
                 {
-                    Console.Clear();
+                    // Console.Clear();
                     userBL.UpdateStatusShoppingCartById(true, user.UserID);
 
                     List<Order> shoppingCart = new List<Order>();
@@ -338,10 +340,10 @@ namespace PL_Console
                     Console.WriteLine("EMAIL KHÁCH HÀNG: {0}", shoppingCart[0].OrderUser.UserEmail);
 
                     Console.WriteLine("MÃ ĐƠN HÀNG: {0}", shoppingCart[0].OrderID);
-                    var table = new ConsoleTable("MÃ ĐỒ UỐNG", "TÊN ĐỒ UỐNG", "SIZE", "GIÁ");
+                    var table = new ConsoleTable("MÃ ĐỒ UỐNG", "TÊN ĐỒ UỐNG", /*"SIZE",*/ "GIÁ");
                     foreach (var item in shoppingCart)
                     {
-                        table.AddRow(item.OrderItem.ItemID, item.OrderItem.ItemName, item.OrderItem.ItemSize, FormatCurrency(item.OrderItem.ItemPrice));
+                        table.AddRow(item.OrderItem.ItemID, item.OrderItem.ItemName, /*item.OrderItem.ItemSize,*/ FormatCurrency(item.OrderItem.ItemPrice));
                     }
                     table.AddRow("", "", "");
                     table.AddRow("TỔNG TIỀN", "", FormatCurrency(total));
@@ -362,11 +364,14 @@ namespace PL_Console
 
                 throw;
             }
+
+            Console.WriteLine("Bấm phím bất kỳ để tiếp tục");
+            Console.ReadKey();
         }
 
         public void ShowOrder()
         {
-            Console.Clear();
+            // Console.Clear();
             OrderBL orderBL = new OrderBL();
             List<Order> listOrder = new List<Order>();
             listOrder = orderBL.ShowAllItemOrder(user.UserID);
