@@ -27,7 +27,7 @@ namespace DAL{
             {
                 command.CommandText = "insert into Orders(orderUser, cartStatus) values(@userID,@CartStatus);";
                 command.Parameters.AddWithValue("@userID",order.OrderUser.UserID);
-                command.Parameters.AddWithValue("@CartStatus", order.CartStatus);
+                command.Parameters.AddWithValue("@cartStatus", order.CartStatus);
                 command.ExecuteNonQuery();
 
                 string queryLastInsertID = $@"select orderID from Orders where orderUser = {order.OrderUser.UserID} order by orderID desc limit 1;";
@@ -220,7 +220,7 @@ namespace DAL{
                 }
 
                 command.Parameters.Clear();
-                command.CommandText = $@"update Orders set cartStatus = 1, orderDate = NOW() where orderUser = {order.OrderUser.UserID} and orderID = {order.OrderID};";
+                command.CommandText = $@"update Orders set cartStatus = 1, orderDate = now() where orderUser = {order.OrderUser.UserID} and orderID = {order.OrderID};";
                 command.ExecuteNonQuery();
 
                 transaction.Commit();

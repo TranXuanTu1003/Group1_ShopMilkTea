@@ -135,16 +135,15 @@ values	  ('SỮA TƯƠI CHÂN TRÂU ĐƯỜNG HỔ ','FRESH MILK TRAVEL SUGAR LA
       ('Trà sữa sương sáo','Flute milk tea', '100','Sương sáo, sương sa là những nguyên liệu phổ biến tại các tỉnh miền Nam và cực thích hợp cho những ngày hè nắng nóng. Sương sáo có tính giải nhiệt cao cùng với đó là nhiều công dụng tốt cho sức khỏe. Trà sữa sương sáo là sự kết hợp giữa trà sữa truyền thống với phần sương sáo mát lạnh.','Đặc điểm đặc trưng so với các loại trà sữa khác: có vị không quá ngọt béo hay ngọt ngậy như các loại trà sữa khác. Thay vào đó là vị ngọt thanh của sương sáo mà vẫn có chút thơm béo béo của sữa tươi và vị chát nhẹ của trà. Trà sữa sương sáo có độ ngọt vừa phải, có mùi thơm đặc trưng cũng như có tính giải khát cao.','trà, bột sữa,đậu đỏ,phô mai,siro đường hổ, sữa tươi, trân châu, đá lạnh,đường');
       
 create table if not exists Orders(
-	orderID int primary key unique,
+	orderID int auto_increment primary key unique ,
     orderUser int not null,
     cartStatus int,
-    orderDate datetime not null,
+    orderDate datetime,
     constraint fk_Orders_Users foreign key(orderUser) references Users(userID)
 );
 
-
-
 select orderID from Orders where orderUser = 2 order by orderID  desc limit 1 ;
+
 create table if not exists OrderDetails(
 	orderID int,
     itemID int,
@@ -385,7 +384,7 @@ grant all on Orders to 'root'@'localhost';
 grant all on OrderDetails to 'root'@'localhost';
 grant lock tables on QuanLyBanTraSua.* to 'root'@'localhost';
 select * from Users where userName = 'tu' and userPassWord = '123456';
-select * from Users where userName = 'tu' or userEmail = 'trantu2000@gmail.com' or userPhoneNumber = '0583653653';
+-- select * from Users where userName = 'tu' or userEmail = 'trantu2000@gmail.com' or userPhoneNumber = '0583653653';
         
 -- lock tables Orders write, Items write, OrderDetails write;
 -- unlock tables
