@@ -289,9 +289,11 @@ namespace DAL{
             }
 
             List<Order> orders = new List<Order>();
-            query = $@"select ord.orderID as orderID, ord.orderDate, it.itemID, it.itemName, it.itemPrice, us.userName, us.userEmail from
-                       Users us inner join Orders ord on ord.orderUser = us.userID inner join orderDetails ordls on ord.orderID = ordls.orderID
+            query = $@"select ord.orderID as orderID, ord.orderDate, it.itemID, it.itemName, itdls.itemPrice, us.userName, us.userEmail from Users us 
+                       inner join Orders ord on ord.orderUser = us.userID 
+                       inner join orderDetails ordls on ord.orderID = ordls.orderID
                        inner join Items it on ordls.itemID = it.itemID
+                       inner join ItemDetails itdls on itdls.itemID = it.itemID
                        where ord.orderUser = {userID} and ord.orderID = {GetLastInsertOrderID(userID)} ;";
 
             reader = DBHelper.ExecQuery(query, DBHelper.OpenConnection());
