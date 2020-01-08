@@ -19,6 +19,7 @@ namespace PL_Console
 
         public void MenuProduct(User us)
         {
+            Console.Clear();
             user = us;
             while (true)
             {
@@ -28,8 +29,8 @@ namespace PL_Console
                 Console.WriteLine("1. Xem thông tin tài khoản");
                 Console.WriteLine("2. Xem danh sách sản phẩm");
                 Console.WriteLine("3. Xem giỏ hàng");
-                Console.WriteLine("4. Mua hàng");
-                Console.WriteLine("5. Exit");
+                Console.WriteLine("4. Lịch sử mua hàng");
+                Console.WriteLine("5. Đăng xuất");
                 Console.WriteLine("-------------------------------------------");
                 Console.Write("Nhập lựa chọn: ");
 
@@ -55,18 +56,42 @@ namespace PL_Console
                 {
                     case 1:
                         ShowInfoCustomer(us);
-                        break;
+                        continue;
                     case 2:
                         ShowListItems();
-                        break;
+                        continue;
                     case 3:
                         ShopingCart();
-                        break;
+                        continue;
                     case 4:
                         ShowOrder();
-                        break;
+                        continue;
                     case 5:
+                        Console.Write("Đăng xuất thật đấy? (Y/N): ");
+                        string chooce;
+                        while (true)
+                        {
+                            chooce = Console.ReadLine();
+                            if (chooce == "Y" || chooce == "y" || chooce == "N" || chooce == "n")
+                            {
+                                if (chooce == "Y" || chooce == "y")
+                                {
+                                    Environment.Exit(0);
+                                    break;
+                                }
+                                else
+                                {
+                                    MenuProduct(us);
+                                    continue;
+                                }
+                            }
+                            else
+                            {
+                                Console.Write("Bạn chỉ được nhập (Y/N): ");
+                            }
+                        }
                         break;
+                        
                 }
                 break;
 
@@ -75,8 +100,7 @@ namespace PL_Console
 
         public void ShowInfoCustomer(User us)
         {
-
-
+            Console.Clear();
             Console.WriteLine("===========================================\n");
             Console.WriteLine("Thông tin tài khoản\n");
             Console.WriteLine("===========================================\n");
@@ -126,6 +150,7 @@ namespace PL_Console
                             continue;
                         case 3:
                             Console.WriteLine("Chức năng đang phát triển");
+                            Console.ReadKey();
                             continue;
                         case 4: 
                             break;
@@ -165,6 +190,7 @@ namespace PL_Console
                         continue;
 
                     case 2:
+                        
                         break;
                 }
                 break;
@@ -186,11 +212,11 @@ namespace PL_Console
                 {
                     if (orderBL.AddToShoppingCart(order))
                     {
-                        Console.WriteLine("Them thanh cong");
+                        Console.WriteLine("Sản phẩm đã được thêm vào giỏ hàng");
                     }
                     else
                     {
-                        Console.WriteLine("san pham da co trong gio hang");
+                        Console.WriteLine("Sản phẩm đã có trong giỏ hàng");
                     }
                 }
                 catch (System.Exception)
@@ -207,7 +233,7 @@ namespace PL_Console
                 {
                     if (orderBL.CreateShoppingCart(order))
                     {
-                        Console.WriteLine("them thanh cong");
+                        Console.WriteLine("Sản phẩm đã được thêm vào giỏ hàng");
                     }
                 }
                 catch (System.Exception)
@@ -217,8 +243,9 @@ namespace PL_Console
                 }
 
             }
-            Console.WriteLine("Nhan phim bat ki de tiep tuc");
+            Console.WriteLine("Nhấn phím bất kì để tiếp tục.");
             Console.ReadKey();
+            
         }
 
         public void DeleteItems(Item item)
@@ -252,23 +279,23 @@ namespace PL_Console
                 double total = 0;
                 if (shoppingCart.Count <= 0)
                 {
-                    Console.WriteLine("Chua co sp nao");
-                    Console.WriteLine("nhan phim bat ki de tt");
+                    Console.WriteLine("Chưa có sản phẩm");
+                    Console.WriteLine("Nhấn phím bất kì để tiếp tục");
                     Console.ReadKey();
                     break;
                 }
                 else
                 {
                     Console.WriteLine($"Bạn có {shoppingCart.Count} loại sản phẩm trong giỏ hàng");
-                    var table = new ConsoleTable("UserID", "UserName", "ItemPrice");
+                    var table = new ConsoleTable("UserID", "UserName", "ItemSize", "ItemPrice");
                     foreach (var item in shoppingCart)
                     {
                         total = total + (double)item.ItemPrice;
-                        table.AddRow(item.ItemID, item.ItemName, FormatCurrency(item.ItemPrice)); // size chua co
+                        table.AddRow(item.ItemID, item.ItemName, item.ItemSize, FormatCurrency(item.ItemPrice)); 
 
                     }
-                    table.AddRow("", "", "");
-                    table.AddRow("Total", "", FormatCurrency(total));
+                    table.AddRow("", "", "", "");
+                    table.AddRow("Total", "", "", FormatCurrency(total));
                     table.Write();
                     Console.WriteLine("Tổng tiền: {0}", FormatCurrency(total));
 
@@ -346,14 +373,14 @@ namespace PL_Console
                     Console.WriteLine("EMAIL KHÁCH HÀNG: {0}", shoppingCart[0].OrderUser.UserEmail);
 
                     Console.WriteLine("MÃ ĐƠN HÀNG: {0}", shoppingCart[0].OrderID);
-                    var table = new ConsoleTable("MÃ ĐỒ UỐNG", "TÊN ĐỒ UỐNG", /*"SIZE",*/ "GIÁ");
+                    var table = new ConsoleTable("MÃ ĐỒ UỐNG", "TÊN ĐỒ UỐNG", "SIZE", "GIÁ");
                     foreach (var item in shoppingCart)
                     {
-                        table.AddRow(item.OrderItem.ItemID, item.OrderItem.ItemName, /*item.OrderItem.ItemSize,*/ FormatCurrency(item.OrderItem.ItemPrice));
+                        table.AddRow(item.OrderItem.ItemID, item.OrderItem.ItemName, item.OrderItem.ItemSize, FormatCurrency(item.OrderItem.ItemPrice));
                     }
-                    table.AddRow("", "", "");
-                    table.AddRow("TỔNG TIỀN", "", FormatCurrency(total));
-                    table.AddRow("NGÀY MUA", "", shoppingCart[0].OrderDate?.ToString("yyyy-MM-dd"));
+                    table.AddRow("", "", "", "");
+                    table.AddRow("TỔNG TIỀN", "","", FormatCurrency(total));
+                    table.AddRow("NGÀY MUA", "","", shoppingCart[0].OrderDate?.ToString("yyyy-MM-dd"));
                     table.Write();
 
                     Console.WriteLine("CÁM ƠN QUÝ KHÁCH");

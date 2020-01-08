@@ -15,7 +15,7 @@ namespace PL_Console
         public void Program()
         {
             int choose;
-            // Console.Clear();
+            Console.Clear();
             Console.WriteLine("-----Welcome To The Happy MilkTea Shop-----");
             Console.WriteLine("===========================================");
             Console.WriteLine("1. Đăng nhập");
@@ -82,6 +82,7 @@ namespace PL_Console
 
         public void MenuLogin()
         {
+            Console.Clear();
             UserBL userBL = new UserBL();
             string username = null;
             string password = null;
@@ -167,6 +168,7 @@ namespace PL_Console
 
         public void MenuRegistration()
         {
+            Console.Clear();
             User user = new User();
             UserBL userBL = new UserBL();
             string userName = null;
@@ -258,6 +260,7 @@ namespace PL_Console
 
         public bool ValiDateLogin(string login)
         {
+            Console.Clear();
             Regex regex = new Regex("[a-zA-Z0-9_]");
             MatchCollection matchCollectionLogin = regex.Matches(login);
             if (matchCollectionLogin.Count < login.Length)

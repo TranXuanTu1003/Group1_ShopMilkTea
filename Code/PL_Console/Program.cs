@@ -6,6 +6,7 @@ namespace PL_Console
     {
         static void Main(string[] args)
         {
+            Console.Clear();
             Menu menu = new Menu();
             menu.Program();
             
