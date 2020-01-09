@@ -75,6 +75,28 @@ namespace DAL
             DBHelper.CloseConnection();
             return item;
         }
+
+        public Item GetItemBySize(string itemSize)
+        {
+            if (itemSize == null)
+            {
+                return null;
+            }
+
+            query = $@"select it.itemID, it.itemName, it.itemNameEnglish, it.itemQuantity, it.itemDescription, it.itemPreview, it.itemResources ,itdls.itemSize, itdls.itemPrice from Items it, ItemDetails itdls where itdls.itemSize = " + itemSize + ";";
+            // query = $"select * from Items where itemID = {itemID}";
+            reader = DBHelper.ExecQuery(query, DBHelper.OpenConnection());
+            Item item = null;
+            if (reader.Read())
+            {
+                item = GetItem(reader);
+            }
+            reader.Close();
+            DBHelper.CloseConnection();
+            return item;
+        }
+
+
         public List<Item> SearchItem(int temp)
         {
             DBHelper.OpenConnection();

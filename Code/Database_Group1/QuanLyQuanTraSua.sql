@@ -10,7 +10,7 @@ create table if not exists Users(
     userPassWord nvarchar(100) not null,
     userEmail nvarchar(100) not null unique,
     userPhoneNumber nvarchar(20) not null,
-    userBirthday datetime not null ,
+    userBirthday nvarchar(50) not null ,
     userGender nvarchar(10) not null check(userGender in ('MALE', 'FEMALE')),
     UserShoppingCart bool default false
 );
@@ -18,7 +18,7 @@ create table if not exists Users(
 insert into Users(userName, userAccount, userPassWord, userEmail, userPhoneNumber, userBirthday, userGender)
 values
 -- ('Adimin', 'e00cf25ad42683b3df678c61f42c6bda', 'trantu10032000@gmail.com','0334064778','2000-10-03','Male'),
--- ('Adimin2', 'c84258e9c39059a89ab77d846ddab909', 'trantu1003@gmail.com','099923232','2000-02-15','Unknown'),
+('Adimin2', 'acc', 'c84258e9c39059a89ab77d846ddab909', 'trantu1003@gmail.com','099923232','2000-02-15','Male'),
 ('tu', 'Tran Xuan Tu', '123456', 'trantu2000@gmail.com','0583653653','2000-01-01','FEMALE');
 
 
@@ -30,10 +30,11 @@ create table if not exists Items(
     itemDescription text not null,
     itemPreview text not null,
     itemResources text not null
+    
 );
 
 insert into Items(itemName, itemNameEnglish , itemQuantity, itemDescription, itemPreview, itemResources)
-values	  ('SỮA TƯƠI CHÂN TRÂU ĐƯỜNG HỔ ','FRESH MILK TRAVEL SUGAR LADIES', '100','Tiger Sugar là sự kết hợp hoàn hảo giữa vị ngọt đặc trưng của siro đường hổ quyện với vị ngậy béo của sữa tươi cùng trân châu dẻo dai uống rồi lại muốn thêm ly nữa','Tiger Sugar là sự kết hợp hoàn hảo giữa vị ngọt đặc trưng của siro đường hổ quyện với vị ngậy béo của sữa tươi cùng trân châu dẻo dai uống rồi lại muốn thêm ly nữa','siro đường hổ, sữa tươi, trân châu, đá lạnh,đường'),
+values('SỮA TƯƠI CHÂN TRÂU ĐƯỜNG HỔ ','FRESH MILK TRAVEL SUGAR LADIES', '100','Tiger Sugar là sự kết hợp hoàn hảo giữa vị ngọt đặc trưng của siro đường hổ quyện với vị ngậy béo của sữa tươi cùng trân châu dẻo dai uống rồi lại muốn thêm ly nữa','Tiger Sugar là sự kết hợp hoàn hảo giữa vị ngọt đặc trưng của siro đường hổ quyện với vị ngậy béo của sữa tươi cùng trân châu dẻo dai uống rồi lại muốn thêm ly nữa','siro đường hổ, sữa tươi, trân châu, đá lạnh,đường'),
 	  ('DÂU TẰM KEM PHÔ MAI', 'PURPLE SEXING CREAM', '100','Được làm từ trái dâu tằm tự nhiên, không sử dụng phẩm màu và hương liệu tổng hợp nên Dâu tằm kem phô mai hội tụ trọn vẹn hương vị thuần khiết nông sản Việt, giữ được màu sắc, hương vị nguyên bản của trái dâu tằm. Vị chát ngọt của trà kết hợp với vị chua ngọt từ mứt dâu tằm, hoà quyện cùng một chút ngậy ngậy của kem phô mai chắc chắn sẽ mang đến một hành trình trải nghiệm hoàn toàn mới lạ cho vị giác của bạn.','Vị chát ngọt của trà kết hợp với vị chua ngọt từ mứt dâu tằm, hoà quyện cùng một chút ngậy ngậy, mặn mặn của kem phô mai mang lại trải nghiệm thú vị khi uống.','trà, bột sữa,dâu tằm,phô mai'), 
       ('Trà sữa khoai môn','Taro milk tea', '100','Trà sữa khoai môn tuy không phải là thức uống mới nhưng nó vẫn giữ được độ hot với giới trẻ, đặc biệt là vào các khoảng thời gian hè nắng nóng. ','Trà sữa khoai môn có vị béo béo của sữa, mùi thơm của khoai môn cùng với chút vị chát nhẹ của trà. Thức uống này không quá ngọt và ngậy như những loại trà sữa có kem cheese, vị ngọt thanh mà vẫn có chút béo bùi là điểm cộng lớn nhất của trà sữa khoai môn. Trà sữa khoai môn một số nơi sẽ dùng bột khoai môn để pha chế hoặc có thể dùng củ khoai môn tươi xay lấy nước sẽ nguyên chất hơn. ','siro đường hổ, sữa tươi, trân châu, đá lạnh,đường'), 
       ('Trà sữa matcha đậu đỏ','Matcha red bean milk tea', '100','Nếu trà sữa matcha là thức uống quá quen thuộc và phổ biến thì trà sữa matcha đậu đỏ lại là sản phẩm mới, thích hợp giải nhiệt dành cho mùa hè nắng nóng. Trà sữa Matcha đậu đỏ về cơ bản vẫn là trà sữa trà xanh với vị chát nhẹ của trà, vị thơm mát của matcha cùng với chút ngọt nhẹ của sữa tươi.','Đặc điểm nổi bật so với các loại trà sữa khác: phần đậu đỏ được xem như topping được rải phía trên bề mặt cốc trà. Phần đậu đỏ này có mùi thơm và vị ngon ngọt đặc trưng, khi uống kết hợp cùng matcha the mát sẽ tạo nên sự hòa quyện hương vị hoàn hảo ở đầu lưỡi.','trà, bột sữa,đậu đỏ,phô mai'), 
@@ -384,6 +385,7 @@ grant all on Orders to 'root'@'localhost';
 grant all on OrderDetails to 'root'@'localhost';
 grant lock tables on QuanLyBanTraSua.* to 'root'@'localhost';
 select * from Users where userName = 'tu' and userPassWord = '123456';
+select * from users;
 -- select * from Users where userName = 'tu' or userEmail = 'trantu2000@gmail.com' or userPhoneNumber = '0583653653';
         
 -- lock tables Orders write, Items write, OrderDetails write;

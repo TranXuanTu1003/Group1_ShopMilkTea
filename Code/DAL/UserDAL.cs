@@ -102,32 +102,33 @@ namespace DAL
         public int ConfirmRegister(string userName, string userEmail)
         {
             int a;
-            query = $@"select * from Users where userName = '{userName}' and userEmail = '{userEmail}'";
             MySqlConnection connection = DBHelper.OpenConnection();
+            query = $@"select * from Users where userName = '{userName}' or userEmail = '{userEmail}';";
+            // query = @"Select * from Users where userName = '" + userName + "' or userEmail ='" + userEmail + "';";
             MySqlCommand command = new MySqlCommand(query, connection);
             reader = command.ExecuteReader();
             if (reader.Read())
             {
-                System.Console.WriteLine("Account or email  already exists");
+                Console.WriteLine("Account or email  already exists");
                 a = 1;
             }
             else
             {
-                System.Console.WriteLine("Registration successful");
+                Console.WriteLine("Registration successful");
                 a = 2;
             }
             reader.Close();
             DBHelper.CloseConnection();
             return a;
         }
-        public int Register(string userName, string userPassword, string userDisplayName, string userEmail, string userPhoneNumber, string userBirthday, string userGender)
+        public int Register(string userName, string userPassword, string userAccount, string userEmail, string userPhoneNumber, string userBirthday, string userGender)
         {
             try
             {
+                MySqlConnection connection = DBHelper.OpenConnection();
 
                 query = @"insert into Users(userName, userAccount, userPassWord, userEmail, userPhoneNumber, userBirthday, userGender)
-                        values'(" + userName + "','" + userDisplayName + "','" + userPassword + "','" + userEmail + "','" + userPhoneNumber + "','" + userBirthday + "','" + userGender + "'');";
-                MySqlConnection connection = DBHelper.OpenConnection();
+                        values('" + userName + "','" + userAccount + "','" + userPassword + "','" + userEmail + "','" + userPhoneNumber + "','" + userBirthday + "','" + userGender + "');";
                 MySqlCommand command = new MySqlCommand(query, connection);
                 command.ExecuteNonQuery();
             }
@@ -139,7 +140,7 @@ namespace DAL
             {
                 DBHelper.CloseConnection();
             }
-            return 100;
+            return 1;
         }
     }
 

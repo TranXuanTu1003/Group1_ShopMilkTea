@@ -175,7 +175,8 @@ namespace DAL{
             }
 
             List<Item> listItems = new List<Item>();
-            query = $@"select it.itemID, it.itemName, itdls.itemPrice from Orders ord inner join OrderDetails ordls on ord.orderID = ordls.orderID 
+            query = $@"select it.itemID, it.itemName, itdls.itemPrice, itdls.itemSize from Orders ord 
+                       inner join OrderDetails ordls on ord.orderID = ordls.orderID 
                        inner join Items it on ordls.itemID = it.itemID 
                        inner join ItemDetails itdls on itdls.itemID = it.itemID
                        where ord.orderUser = {userID} and ord.cartStatus = 0 ;";
@@ -256,7 +257,7 @@ namespace DAL{
             }
             catch (System.Exception)
             {
-                Console.WriteLine("Ko the ket noi voi database");
+                Console.WriteLine("Không thể kết nối với database");
                 return null;
             }
             while (reader.Read())
@@ -289,7 +290,7 @@ namespace DAL{
             }
 
             List<Order> orders = new List<Order>();
-            query = $@"select ord.orderID as orderID, ord.orderDate, it.itemID, it.itemName, itdls.itemPrice, us.userName, us.userEmail from Users us 
+            query = $@"select ord.orderID as orderID, ord.orderDate, it.itemID, it.itemName, itdls.itemSize, itdls.itemPrice, us.userAccount, us.userEmail from Users us 
                        inner join Orders ord on ord.orderUser = us.userID 
                        inner join orderDetails ordls on ord.orderID = ordls.orderID
                        inner join Items it on ordls.itemID = it.itemID
@@ -339,6 +340,7 @@ namespace DAL{
             item.ItemName = reader.GetString("itemName");
             item.ItemPrice = reader.GetDouble("itemPrice");
             // item.ItemNameEnglish = reader.GetString("itemNameEnglish");
+            item.ItemSize = reader.GetString("itemSize");
             return item;
         }
 
@@ -348,6 +350,7 @@ namespace DAL{
             order.OrderItem.ItemID = reader.GetInt32("itemID");
             order.OrderItem.ItemName = reader.GetString("itemName");
             order.OrderDate = reader.GetDateTime("orderDate");
+            // order.OrderItem.ItemSize = reader.GetString("itemSize");
 
             return order;
         }
@@ -357,10 +360,11 @@ namespace DAL{
             order.OrderItem = new Item();
             order.OrderUser = new User();
             order.OrderID = reader.GetInt32("itemID");
-            order.OrderUser.UserName = reader.GetString("userName");
+            order.OrderUser.UserAccount = reader.GetString("userAccount");
             order.OrderUser.UserEmail = reader.GetString("userEmail");
             order.OrderItem.ItemID = reader.GetInt32("itemID");
             order.OrderItem.ItemPrice = reader.GetDouble("itemPrice");
+            order.OrderItem.ItemSize = reader.GetString("itemSize");
             order.OrderDate = reader.GetDateTime("orderDate");
             order.OrderItem.ItemName = reader.GetString("itemName");
 

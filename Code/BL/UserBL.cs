@@ -40,7 +40,7 @@ namespace BL
             return userDAL.UpdateStatusShoppingCartById(isHave, userID);
         }
 
-        public int ConfirmRegistration(string userName, string userEmail){
+        public int ConfirmRegister(string userName, string userEmail){
             return userDAL.ConfirmRegister(userName, userEmail);
         }
 
