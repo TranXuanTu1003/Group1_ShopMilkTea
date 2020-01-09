@@ -8,6 +8,7 @@ using ConsoleTables;
 using DAL;
 using System.Globalization;
 
+
 namespace PL_Console
 {
     public class ShowProduct
@@ -91,7 +92,7 @@ namespace PL_Console
                             }
                         }
                         break;
-                        
+
                 }
                 break;
 
@@ -123,6 +124,7 @@ namespace PL_Console
                 while (true)
                 {
                     int? ItemID;
+                    // string ItemSize;
                     string[] listcol = { "Chọn sản phẩm", "Tìm kiếm", "Hiển thị thêm sản phẩm", "Thoát" };
                     int choice = Extend.ShowListItems("Danh sách đồ uống", listcol, items, user.UserID);
                     switch (choice)
@@ -138,6 +140,8 @@ namespace PL_Console
                             else
                             {
                                 ItemID = Extend.SelectItem(items);
+                                // ItemSize = Extend.SelectItem(items);
+                                // ShowAnItem(ItemID, ItemSize);
                                 ShowAnItem(ItemID);
                             }
                             continue;
@@ -152,7 +156,7 @@ namespace PL_Console
                             Console.WriteLine("Chức năng đang phát triển");
                             Console.ReadKey();
                             continue;
-                        case 4: 
+                        case 4:
                             break;
 
                     }
@@ -166,19 +170,21 @@ namespace PL_Console
             while (true)
             {
                 // Console.Clear();
+                // string itemSize = Console.ReadLine();
                 Item item = new Item();
                 item = itemBL.GetItemByID(ItemID);
+                // item = itemBL.GetItemBySize(itemSize);
 
                 var table = new ConsoleTable("Name", Convert.ToString(item.ItemName));
                 table.AddRow("Name English: ", item.ItemNameEnglish);
                 table.AddRow("Price: ", FormatCurrency(item.ItemPrice));
                 table.AddRow("Size: ", item.ItemSize);
-                // table.AddRow("Preview: ", item.ItemPreview);
                 table.AddRow("Resources: ", item.ItemResources);
                 // table.AddRow("Quantity: ", item.ItemQuantity);
                 table.Write();
+                Console.WriteLine("Preview: ");
+                Console.WriteLine(item.ItemPreview);
                 Console.WriteLine();
-
 
                 OrderBL orderBL = new OrderBL();
                 string[] choice = { "Add To Cart", "Exit" };
@@ -190,7 +196,7 @@ namespace PL_Console
                         continue;
 
                     case 2:
-                        
+
                         break;
                 }
                 break;
@@ -245,7 +251,7 @@ namespace PL_Console
             }
             Console.WriteLine("Nhấn phím bất kì để tiếp tục.");
             Console.ReadKey();
-            
+
         }
 
         public void DeleteItems(Item item)
@@ -253,13 +259,13 @@ namespace PL_Console
             OrderBL orderBL = new OrderBL();
             if (orderBL.DeleteItemInShoppingCartByItemID(item.ItemID))
             {
-                Console.WriteLine("Xoa thanh cong");
+                Console.WriteLine("Xóa thành công");
             }
             else
             {
-                Console.WriteLine("sp nay chua co trong gio hang");
+                Console.WriteLine("Sản phẩm này chưa có trong giỏ hàng");
             }
-            Console.WriteLine("nhan phim bat ki de tt");
+            Console.WriteLine("Nhấn phím bất kì để tiếp tục");
             Console.ReadKey();
         }
 
@@ -291,7 +297,7 @@ namespace PL_Console
                     foreach (var item in shoppingCart)
                     {
                         total = total + (double)item.ItemPrice;
-                        table.AddRow(item.ItemID, item.ItemName, item.ItemSize, FormatCurrency(item.ItemPrice)); 
+                        table.AddRow(item.ItemID, item.ItemName, item.ItemSize, FormatCurrency(item.ItemPrice));
 
                     }
                     table.AddRow("", "", "", "");
@@ -368,19 +374,20 @@ namespace PL_Console
                     List<Order> shoppingCart = new List<Order>();
                     shoppingCart = orderBL.ShowOrderUserPaySucess(user.UserID);
 
-                    Console.WriteLine("Hóa Đơn");
-                    Console.WriteLine("TÊN KHÁCH HÀNG: {0}", shoppingCart[0].OrderUser.UserName);
+                    Console.WriteLine("-------------------------------------------");
+                    Console.WriteLine("                Hóa Đơn                    ");
+                    Console.WriteLine("TÊN KHÁCH HÀNG: {0}", shoppingCart[0].OrderUser.UserAccount);
                     Console.WriteLine("EMAIL KHÁCH HÀNG: {0}", shoppingCart[0].OrderUser.UserEmail);
-
                     Console.WriteLine("MÃ ĐƠN HÀNG: {0}", shoppingCart[0].OrderID);
+                    // Console.WriteLine("-------------------------------------------");
                     var table = new ConsoleTable("MÃ ĐỒ UỐNG", "TÊN ĐỒ UỐNG", "SIZE", "GIÁ");
                     foreach (var item in shoppingCart)
                     {
                         table.AddRow(item.OrderItem.ItemID, item.OrderItem.ItemName, item.OrderItem.ItemSize, FormatCurrency(item.OrderItem.ItemPrice));
                     }
                     table.AddRow("", "", "", "");
-                    table.AddRow("TỔNG TIỀN", "","", FormatCurrency(total));
-                    table.AddRow("NGÀY MUA", "","", shoppingCart[0].OrderDate?.ToString("yyyy-MM-dd"));
+                    table.AddRow("TỔNG TIỀN", "", "", FormatCurrency(total));
+                    table.AddRow("NGÀY MUA", "", "", shoppingCart[0].OrderDate?.ToString("yyyy-MM-dd"));
                     table.Write();
 
                     Console.WriteLine("CÁM ƠN QUÝ KHÁCH");
@@ -415,6 +422,7 @@ namespace PL_Console
             }
             else
             {
+
                 if (listOrder.Count <= 0)
                 {
                     Console.WriteLine("Bạn chưa mua gì");
@@ -424,7 +432,7 @@ namespace PL_Console
                     var table = new ConsoleTable("Mã đồ uống", "Tên đồ uống", "Ngày mua");
                     foreach (var item in listOrder)
                     {
-                        table.AddRow(item.OrderItem.ItemID, item.OrderItem.ItemName, item.OrderDate?.ToString("yyyy-MM-dd"));
+                        table.AddRow(item.OrderItem.ItemID, item.OrderItem.ItemName, item.OrderDate?.ToString("yyyy-MM-dd")); // table.AddRow("TỔNG TIỀN", "","", FormatCurrency(total));
                     }
                     table.Write();
                 }
@@ -432,6 +440,8 @@ namespace PL_Console
                 Console.ReadKey();
             }
         }
+
+
         public static string FormatCurrency(double ItemPrice)
         {
             string a = string.Format(new CultureInfo("vi-VN"), "{0:#,##0} VND", ItemPrice);

@@ -124,15 +124,21 @@ namespace PL_Console
             }
             return choose;
         }
-        public static short SelectItem(List<Item> items)
+        public static short SelectItem(List<Item> items)  // selectItemByIDandSize
         {
             short ItemID = -1;
+            // string ItemSize = "-1";
             bool isHave = false;
             try
             {
                 Console.Write("Nhập ID sản phẩm: ");
-
                 ItemID = Int16.Parse(Console.ReadLine());
+
+                // Console.Write("Nhập Size sản phẩm: ");
+                // short itemSize = Convert.ToInt16(ItemSize);
+                // ItemSize = Console.ReadLine();
+                
+                
             }
             catch (System.Exception)
             {
