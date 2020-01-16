@@ -76,7 +76,7 @@ namespace PL_Console
                 {
                     try
                     {
-                        Console.Write("#Please enter the correct selection ");
+                        Console.Write("Bạn nhập sai, Hãy nhập lại! ");
                         choice = Int16.Parse(Console.ReadLine());
                     }
                     catch (System.Exception)

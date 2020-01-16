@@ -148,6 +148,7 @@ select orderID from Orders where orderUser = 2 order by orderID  desc limit 1 ;
 create table if not exists OrderDetails(
 	orderID int,
     itemID int,
+	amount int not null check(amount >= 0),
     constraint primary key(orderID, itemID),
     constraint fk_OrderDetails_Orders foreign key(orderID) references Orders(orderID),
     constraint fk_OrderDetails_Items foreign key(itemID) references Items(itemID)

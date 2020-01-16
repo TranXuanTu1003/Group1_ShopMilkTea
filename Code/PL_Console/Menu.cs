@@ -5,12 +5,18 @@ using System.Text;
 using System.Text.RegularExpressions;
 using System.Security.Cryptography;
 using ConsoleTables;
+using System.Globalization;
 using System.Collections.Generic;
 
 namespace PL_Console
 {
     public class Menu
     {
+
+        private ItemBL itemBL = new ItemBL();
+        private UserBL userBL = new UserBL();
+        private User user = new User();
+        private Order order = new Order();
 
         public void Program()
         {
@@ -20,6 +26,7 @@ namespace PL_Console
             Console.WriteLine("===========================================");
             Console.WriteLine("\n1. Đăng nhập");
             Console.WriteLine("2. Đăng ký");
+            Console.WriteLine("3. Xem danh sách sản phẩm");
             Console.WriteLine("0. Thoát\n");
             Console.WriteLine("-------------------------------------------");
             Console.Write("\nNhập lựa chọn: ");
@@ -31,7 +38,7 @@ namespace PL_Console
                     Console.WriteLine("Bạn nhập sai, Hãy nhập lại: ");
                     Console.Write("Nhập lựa chọn: ");
                 }
-                else if (choose < 0 || choose > 2)
+                else if (choose < 0 || choose > 3)
                 {
                     Console.WriteLine("Bạn nhập sai, Hãy nhập lại: ");
                     Console.Write("Nhập lựa chọn: ");
@@ -48,6 +55,9 @@ namespace PL_Console
                     break;
                 case 2:
                     MenuRegistration();
+                    break;
+                case 3:
+                    ShowListItems();
                     break;
                 case 0:
                     {
@@ -176,7 +186,7 @@ namespace PL_Console
             string displayname = null;
             string email = null;
             string phoneNumber = null;
-            string birthday =null;
+            string birthday = null;
             string gender = null;
 
             Console.WriteLine("===========================================");
@@ -385,6 +395,105 @@ namespace PL_Console
             {
                 return true;
             }
+        }
+
+
+        public void ShowListItems()
+        {
+            List<Item> items = null;
+            items = itemBL.GetListItems();
+            if (items == null)
+            {
+                Console.ReadKey();
+            }
+            else
+            {
+                while (true)
+                {
+                    int? ItemID;
+                    // string ItemSize;
+                    string[] listcol = { "Chọn sản phẩm", "Tìm kiếm", "Hiển thị thêm sản phẩm", "Thoát" };
+                    int choice = Extend.ShowListItems("Danh sách đồ uống", listcol, items, user.UserID);
+                    switch (choice)
+                    {
+                        case 1:
+                            if (items.Count <= 0)
+                            {
+                                Console.WriteLine("Chưa có sản phẩm");
+                                Console.WriteLine("Nhấn phím bất kì để hiển thị danh sách đồ uống");
+                                Console.ReadKey();
+                                items = itemBL.GetListItems();
+                            }
+                            else
+                            {
+                                ItemID = Extend.SelectItem(items);
+                                ShowAnItem(ItemID);
+                            }
+                            continue;
+                        case 2:
+                            Console.Write("Nhập tên sản phẩm: ");
+                            Console.InputEncoding = Encoding.Unicode;
+                            Console.OutputEncoding = Encoding.Unicode;
+                            string itemName = Console.ReadLine();
+                            items = itemBL.SearchItemName(itemName);
+                            continue;
+                        case 3:
+                            Console.WriteLine("Chức năng đang phát triển");
+                            Console.ReadKey();
+                            continue;
+                        case 4:
+                            Program();
+                            break;
+
+                    }
+                    break;
+                }
+            }
+        }
+
+        public void ShowAnItem(int? ItemID)
+        {
+            while (true)
+            {
+                // Console.Clear();
+                Item item = new Item();
+                ItemBL itemBL = new ItemBL();
+                item = itemBL.GetItemByID(ItemID);
+                // item = itemBL.GetItemBySize(itemSize);
+
+                var table = new ConsoleTable("Tên Đồ Uống", Convert.ToString(item.ItemName));
+                table.AddRow("Tên Tiếng Anh: ", item.ItemNameEnglish);
+                table.AddRow("Size: ", item.ItemSize);
+                table.AddRow("Giá: ", FormatCurrency(item.ItemPrice));
+                table.AddRow("Nguyên liệu: ", item.ItemResources);
+                // table.AddRow("Quantity: ", item.ItemQuantity);
+                table.Write();
+                Console.WriteLine("Mô tả: ");
+                Console.WriteLine(item.ItemPreview);
+                OrderBL orderBL = new OrderBL();
+                string[] choice = { "Thêm vào giỏ hàng", "Thoát" };
+                short choose = Extend.MenuDetails("Menu", choice);
+                switch (choose)
+                {
+                    case 1:
+                        // AddToCart(item);
+                        Console.WriteLine("Chức năng này cần đăng nhập trước khi sử dụng");
+                        Console.ReadKey();
+                        continue;
+
+                    case 2:
+
+                        break;
+                }
+                break;
+
+            }
+
+        }
+        public static string FormatCurrency(double ItemPrice)
+        {
+            string a = string.Format(new CultureInfo("vi-VN"), "{0:#,##0} VND", ItemPrice);
+            return a;
         }
     }
 }
