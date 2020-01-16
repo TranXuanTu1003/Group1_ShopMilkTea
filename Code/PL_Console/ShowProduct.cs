@@ -26,7 +26,7 @@ namespace PL_Console
             {
                 OrderBL orderBL = new OrderBL();
                 int choice;
-                Console.WriteLine("===========================================");
+                Console.WriteLine("\n===========================================");
                 Console.WriteLine("1. Xem thông tin tài khoản");
                 Console.WriteLine("2. Xem danh sách sản phẩm");
                 Console.WriteLine("3. Xem giỏ hàng");
@@ -175,19 +175,19 @@ namespace PL_Console
                 item = itemBL.GetItemByID(ItemID);
                 // item = itemBL.GetItemBySize(itemSize);
 
-                var table = new ConsoleTable("Name", Convert.ToString(item.ItemName));
-                table.AddRow("Name English: ", item.ItemNameEnglish);
-                table.AddRow("Price: ", FormatCurrency(item.ItemPrice));
+                var table = new ConsoleTable("Tên Đồ Uống", Convert.ToString(item.ItemName));
+                table.AddRow("Tên Tiếng Anh: ", item.ItemNameEnglish);
                 table.AddRow("Size: ", item.ItemSize);
-                table.AddRow("Resources: ", item.ItemResources);
+                table.AddRow("Giá: ", FormatCurrency(item.ItemPrice));
+                table.AddRow("Nguyên liệu: ", item.ItemResources);
                 // table.AddRow("Quantity: ", item.ItemQuantity);
-                table.Write();
-                Console.WriteLine("Preview: ");
+                // table.Write();
+                Console.WriteLine("Mô tả: ");
                 Console.WriteLine(item.ItemPreview);
-                Console.WriteLine();
+                // Console.WriteLine();
 
                 OrderBL orderBL = new OrderBL();
-                string[] choice = { "Add To Cart", "Exit" };
+                string[] choice = { "Thêm vào giỏ hàng", "Thoát" };
                 short choose = Extend.MenuDetails("Menu", choice);
                 switch (choose)
                 {
@@ -293,7 +293,7 @@ namespace PL_Console
                 else
                 {
                     Console.WriteLine($"Bạn có {shoppingCart.Count} loại sản phẩm trong giỏ hàng");
-                    var table = new ConsoleTable("UserID", "UserName", "ItemSize", "ItemPrice");
+                    var table = new ConsoleTable("ID", "Tên Đồ Uống", "Size", "Giá");
                     foreach (var item in shoppingCart)
                     {
                         total = total + (double)item.ItemPrice;
@@ -301,9 +301,8 @@ namespace PL_Console
 
                     }
                     table.AddRow("", "", "", "");
-                    table.AddRow("Total", "", "", FormatCurrency(total));
+                    table.AddRow("Tổng tiền", "", "", FormatCurrency(total));
                     table.Write();
-                    Console.WriteLine("Tổng tiền: {0}", FormatCurrency(total));
 
                     Console.WriteLine();
                     string[] choice = { "Thanh toán", "Xóa đồ uống khỏi giở hàng", "Thoát" };
@@ -380,14 +379,14 @@ namespace PL_Console
                     Console.WriteLine("EMAIL KHÁCH HÀNG: {0}", shoppingCart[0].OrderUser.UserEmail);
                     Console.WriteLine("MÃ ĐƠN HÀNG: {0}", shoppingCart[0].OrderID);
                     // Console.WriteLine("-------------------------------------------");
-                    var table = new ConsoleTable("MÃ ĐỒ UỐNG", "TÊN ĐỒ UỐNG", "SIZE", "GIÁ");
+                    var table = new ConsoleTable("MÃ ĐƠN HÀNG", "TÊN ĐỒ UỐNG", "SIZE", "GIÁ");
                     foreach (var item in shoppingCart)
                     {
-                        table.AddRow(item.OrderItem.ItemID, item.OrderItem.ItemName, item.OrderItem.ItemSize, FormatCurrency(item.OrderItem.ItemPrice));
+                        table.AddRow(item.OrderID, item.OrderItem.ItemName, item.OrderItem.ItemSize, FormatCurrency(item.OrderItem.ItemPrice));
                     }
                     table.AddRow("", "", "", "");
-                    table.AddRow("TỔNG TIỀN", "", "", FormatCurrency(total));
                     table.AddRow("NGÀY MUA", "", "", shoppingCart[0].OrderDate?.ToString("yyyy-MM-dd"));
+                    table.AddRow("TỔNG TIỀN", "", "", FormatCurrency(total));
                     table.Write();
 
                     Console.WriteLine("CÁM ƠN QUÝ KHÁCH");
@@ -429,7 +428,7 @@ namespace PL_Console
                 }
                 else
                 {
-                    var table = new ConsoleTable("Mã đồ uống", "Tên đồ uống", "Ngày mua");
+                    var table = new ConsoleTable("Mã đơn hàng", "Tên đồ uống", "Ngày mua");
                     foreach (var item in listOrder)
                     {
                         table.AddRow(item.OrderItem.ItemID, item.OrderItem.ItemName, item.OrderDate?.ToString("yyyy-MM-dd")); // table.AddRow("TỔNG TIỀN", "","", FormatCurrency(total));

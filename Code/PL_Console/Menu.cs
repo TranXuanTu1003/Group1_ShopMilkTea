@@ -16,13 +16,13 @@ namespace PL_Console
         {
             int choose;
             Console.Clear();
-            Console.WriteLine("-----Welcome To The Happy MilkTea Shop-----");
+            Console.WriteLine("\n-----Welcome To The Happy MilkTea Shop-----");
             Console.WriteLine("===========================================");
-            Console.WriteLine("1. Đăng nhập");
+            Console.WriteLine("\n1. Đăng nhập");
             Console.WriteLine("2. Đăng ký");
-            Console.WriteLine("0. Exit");
+            Console.WriteLine("0. Thoát\n");
             Console.WriteLine("-------------------------------------------");
-            Console.Write("Nhập lựa chọn: ");
+            Console.Write("\nNhập lựa chọn: ");
             while (true)
             {
                 bool check = Int32.TryParse(Console.ReadLine(), out choose);
@@ -92,9 +92,9 @@ namespace PL_Console
                 Console.WriteLine("===========================================");
                 Console.WriteLine("Đăng nhập");
                 Console.WriteLine("-------------------------------------------");
-                Console.Write("Enter UserName: ");
+                Console.Write("Nhập Tên Tài Khoản: ");
                 username = Console.ReadLine();
-                Console.Write("Enter Password: ");
+                Console.Write("Nhập Mật Khẩu: ");
                 password = UserBL.Password();
 
 
@@ -125,7 +125,7 @@ namespace PL_Console
                         }
                     }
                 }
-               
+
                 user = userBL.GetUserByUserNameAndPassword(username, password);
 
                 if (user == null)
@@ -171,37 +171,149 @@ namespace PL_Console
             Console.Clear();
             User user = new User();
             UserBL userBL = new UserBL();
-            string userName = null;
-            string userEmail = null;
-            string userPassword = null;
-            string userDisplayName = null;
-            string userPhoneNumber = null;
-            string userBirthday = null;
-            string userGender = null;
-
+            string username = null;
+            string password = null;
+            string displayname = null;
+            string email = null;
+            string phoneNumber = null;
+            string birthday =null;
+            string gender = null;
 
             Console.WriteLine("===========================================");
             Console.WriteLine("----------Tạo Tài Khoản -------------------");
             Console.WriteLine("-------------------------------------------");
-            Console.Write("Username: ");
-            userName = Console.ReadLine();
-            Console.Write("Password: ");
-            userPassword = Console.ReadLine();
-            Console.Write("Email: ");
-            userEmail = Console.ReadLine();
-            Console.Write("Full Name: ");
-            userDisplayName = Console.ReadLine();
-            Console.Write("Phone Number: ");
-            userPhoneNumber = Console.ReadLine();
-            Console.Write("Date Of Birth: ");
-            userBirthday = Console.ReadLine();
-            Console.Write("Gender: ");
-            userGender = Console.ReadLine();
+            Console.Write("Enter UserName: ");
+            while (true)
+            {
+                username = Console.ReadLine();
+                Regex regex = new Regex("[a-zA-Z0-9_]");
 
-            int choice = userBL.ConfirmRegister(userName, userEmail);
+                if (regex.IsMatch(username))
+                {
+                    user.UserName = username;
+                    break;
+                }
+                else
+                {
+                    Console.WriteLine("Bạn nhập sai, Hãy nhập lại!!!");
+                    Console.Write("Enter Username: ");
+                }
+
+            }
+            Console.Write("Enter Password: ");
+            while (true)
+            {
+                // password = Console.ReadLine();
+                password = UserBL.Password();
+                Regex regex = new Regex("[a-zA-Z0-9_]");
+
+                if (regex.IsMatch(password))
+                {
+                    user.PassWord = password;
+                    break;
+                }
+                else
+                {
+                    Console.WriteLine("Bạn nhập sai, Hãy nhập lại!!!");
+                    Console.Write("Enter Password: ");
+                }
+
+            }
+            Console.Write("Enter DisplayName: ");
+            while (true)
+            {
+                displayname = Console.ReadLine();
+                Regex regex = new Regex("[a-zA-Z0-9_]");
+
+                if (regex.IsMatch(displayname))
+                {
+                    user.UserAccount = displayname;
+                    break;
+                }
+                else
+                {
+                    Console.WriteLine("Bạn nhập sai, Hãy nhập lại!!!");
+                    Console.Write("Enter DisplayName: ");
+                }
+
+            }
+            Console.Write("Enter Email: ");
+            while (true)
+            {
+                email = Console.ReadLine();
+                Regex regex = new Regex("[a-zA-Z0-9_]");
+
+                if (regex.IsMatch(email))
+                {
+                    user.UserEmail = email;
+                    break;
+                }
+                else
+                {
+                    Console.WriteLine("Bạn nhập sai, Hãy nhập lại!!!");
+                    Console.Write("Enter Email: ");
+                }
+
+            }
+            Console.Write("Enter PhoneNumber: ");
+            while (true)
+            {
+                phoneNumber = Console.ReadLine();
+                Regex regex = new Regex("[0-9]");
+
+                if (regex.IsMatch(phoneNumber))
+                {
+                    user.UserPhoneNumber = phoneNumber;
+                    break;
+                }
+                else
+                {
+                    Console.WriteLine("Bạn nhập sai, Hãy nhập lại!!!");
+                    Console.Write("Enter PhoneNumber: ");
+                }
+
+            }
+            Console.Write("Enter BirthDay: ");
+            while (true)
+            {
+                birthday = Console.ReadLine();
+                Regex regex = new Regex(@"(((0|1)[0-9]|2[0-9]|3[0-1])\/(0[1-9]|1[0-2])\/((1[9]|2[0])\d\d))$");
+
+                if (regex.IsMatch(birthday))
+                {
+                    user.UserBirthday = birthday;
+                    break;
+                }
+                else
+                {
+                    Console.WriteLine("Bạn nhập sai, Hãy nhập lại!!!");
+                    Console.Write("Enter BirthDay: ");
+                }
+
+            }
+            Console.Write("Enter Gender: ");
+            while (true)
+            {
+                gender = Console.ReadLine();
+                Regex regex = new Regex(@"^M(ale)?$|^F(emale)?$|^m(ale)?$|^f(emale)?$");
+                if (regex.IsMatch(gender))
+                {
+                    user.UserGender = gender;
+                    break;
+                }
+                else
+                {
+                    Console.WriteLine("Bạn nhập sai, Hãy nhập lại!!!");
+                    Console.Write("Enter Gender: ");
+                }
+
+            }
+
+
+            int choice = userBL.ConfirmRegister(username, email);
             if (choice == 2)
             {
-                userBL.Register(userName, userPassword, userDisplayName, userEmail, userPhoneNumber, userBirthday, userGender);
+                userBL.Register(username, password, displayname, email, phoneNumber, birthday, gender);
                 Console.WriteLine("Đăng kí thành công");
                 Console.Write("Bạn có muốn tiếp tục ? (Y/N): ");
                 string choice1;
@@ -212,9 +324,8 @@ namespace PL_Console
                     {
                         if (choice1 == "Y" || choice1 == "y")
                         {
-                            ShowProduct show = new ShowProduct();
-                            show.MenuProduct(user);
-                            continue;
+                            Program();
+                            break;
                         }
                         else
                         {
@@ -230,7 +341,7 @@ namespace PL_Console
             }
             else
             {
-                Console.WriteLine("UserName or Email đã tồn tại!");
+                Console.WriteLine("Tên đăng nhập hoặc Email đã tồn tại!");
                 Console.Write("Bạn có muốn tiếp tục ? (Y/N): ");
                 string choice2;
                 while (true)
@@ -256,7 +367,6 @@ namespace PL_Console
                 }
             }
         }
-
 
         public bool ValiDateLogin(string login)
         {
@@ -412,7 +522,7 @@ namespace PL_Console
 // }
 
 // }
-              
+
 //         }
 //         public string Password()
 //         {
@@ -443,97 +553,97 @@ namespace PL_Console
 //             return sb.ToString();
 //         }
 
-    //     // public string Password()
-    //     // {
-    //     //     // Console.Write("Enter UserName:  ");
-    //     //     // string UserName = Console.ReadLine();
+//     // public string Password()
+//     // {
+//     //     // Console.Write("Enter UserName:  ");
+//     //     // string UserName = Console.ReadLine();
 
-    //     //     using (MD5 md5Hash = MD5.Create())
-    //     //     {
-    //     //         string hash = GetMd5Hash(md5Hash, source);
+//     //     using (MD5 md5Hash = MD5.Create())
+//     //     {
+//     //         string hash = GetMd5Hash(md5Hash, source);
 
-    //     //         // Console.WriteLine("\nThe MD5 hash of password is: " + hash);
+//     //         // Console.WriteLine("\nThe MD5 hash of password is: " + hash);
 
-    //     //         // Console.WriteLine("Verifying the hash...");
-    //     //         // Console.WriteLine("Login successful, Press enter to continue...");
+//     //         // Console.WriteLine("Verifying the hash...");
+//     //         // Console.WriteLine("Login successful, Press enter to continue...");
 
-    //     //         if (VerifyMd5Hash(md5Hash, source, hash))
-    //     //         {
-    //     //             Console.WriteLine("The hashes are the same.");
-    //     //         }
-    //     //         else
-    //     //         {
-    //     //             Console.WriteLine("The hashes are not same.");
-    //     //         }
-    //     //     }
+//     //         if (VerifyMd5Hash(md5Hash, source, hash))
+//     //         {
+//     //             Console.WriteLine("The hashes are the same.");
+//     //         }
+//     //         else
+//     //         {
+//     //             Console.WriteLine("The hashes are not same.");
+//     //         }
+//     //     }
 
-    //     //  string InputPassword()
-    //     // {
-    //     //     string InputPass = "";
-    //     //     do
-    //     //     {
-    //     //         ConsoleKeyInfo key = Console.ReadKey(true);
-    //     //         if (key.Key != ConsoleKey.Backspace && key.Key != ConsoleKey.Enter)
-    //     //         {
-    //     //             InputPass += key.KeyChar;
-    //     //             Console.Write("*");
-    //     //         }
-    //     //         else
-    //     //         {
-    //     //             if (key.Key == ConsoleKey.Backspace && InputPass.Length > 0)
-    //     //             {
-    //     //                 InputPass = InputPass.Substring(0, (InputPass.Length - 1));
-    //     //                 Console.Write("\b \b");
-    //     //             }
-    //     //             else if (key.Key == ConsoleKey.Enter)
-    //     //             {
-    //     //                 break;
-    //     //             }
-    //     //         }
-    //     //     }
-    //     //     while (true);
-    //     //     return InputPass;
-    //     // }
-    //     //  string GetMd5Hash(MD5 md5Hash, string input)
-    //     // {
+//     //  string InputPassword()
+//     // {
+//     //     string InputPass = "";
+//     //     do
+//     //     {
+//     //         ConsoleKeyInfo key = Console.ReadKey(true);
+//     //         if (key.Key != ConsoleKey.Backspace && key.Key != ConsoleKey.Enter)
+//     //         {
+//     //             InputPass += key.KeyChar;
+//     //             Console.Write("*");
+//     //         }
+//     //         else
+//     //         {
+//     //             if (key.Key == ConsoleKey.Backspace && InputPass.Length > 0)
+//     //             {
+//     //                 InputPass = InputPass.Substring(0, (InputPass.Length - 1));
+//     //                 Console.Write("\b \b");
+//     //             }
+//     //             else if (key.Key == ConsoleKey.Enter)
+//     //             {
+//     //                 break;
+//     //             }
+//     //         }
+//     //     }
+//     //     while (true);
+//     //     return InputPass;
+//     // }
+//     //  string GetMd5Hash(MD5 md5Hash, string input)
+//     // {
 
-    //     //     // Convert the input string to a byte array and compute the hash.
-    //     //     byte[] data = md5Hash.ComputeHash(Encoding.UTF8.GetBytes(input));
+//     //     // Convert the input string to a byte array and compute the hash.
+//     //     byte[] data = md5Hash.ComputeHash(Encoding.UTF8.GetBytes(input));
 
-    //     //     // Create a new Stringbuilder to collect the bytes
-    //     //     // and create a string.
-    //     //     StringBuilder sBuilder = new StringBuilder();
+//     //     // Create a new Stringbuilder to collect the bytes
+//     //     // and create a string.
+//     //     StringBuilder sBuilder = new StringBuilder();
 
-    //     //     // Loop through each byte of the hashed data 
-    //     //     // and format each one as a hexadecimal string.
-    //     //     for (int i = 0; i < data.Length; i++)
-    //     //     {
-    //     //         sBuilder.Append(data[i].ToString("x2"));
-    //     //     }
+//     //     // Loop through each byte of the hashed data 
+//     //     // and format each one as a hexadecimal string.
+//     //     for (int i = 0; i < data.Length; i++)
+//     //     {
+//     //         sBuilder.Append(data[i].ToString("x2"));
+//     //     }
 
-    //     //     // Return the hexadecimal string.
-    //     //     return sBuilder.ToString();
-    //     // }
+//     //     // Return the hexadecimal string.
+//     //     return sBuilder.ToString();
+//     // }
 
-    //     // // Verify a hash against a string.
-    //     //  bool VerifyMd5Hash(MD5 md5Hash, string input, string hash)
-    //     // {
-    //     //     // Hash the input.
-    //     //     string hashOfInput = GetMd5Hash(md5Hash, input);
+//     // // Verify a hash against a string.
+//     //  bool VerifyMd5Hash(MD5 md5Hash, string input, string hash)
+//     // {
+//     //     // Hash the input.
+//     //     string hashOfInput = GetMd5Hash(md5Hash, input);
 
-    //     //     // Create a StringComparer an compare the hashes.
-    //     //     StringComparer comparer = StringComparer.OrdinalIgnoreCase;
+//     //     // Create a StringComparer an compare the hashes.
+//     //     StringComparer comparer = StringComparer.OrdinalIgnoreCase;
 
-    //     //     if (0 == comparer.Compare(hashOfInput, hash))
-    //     //     {
-    //     //         return true;
-    //     //     }
-    //     //     else
-    //     //     {
-    //     //         return false;
-    //     //     }
-    //     // }
-    // // }
-    // }
+//     //     if (0 == comparer.Compare(hashOfInput, hash))
+//     //     {
+//     //         return true;
+//     //     }
+//     //     else
+//     //     {
+//     //         return false;
+//     //     }
+//     // }
+// // }
+// }
 // }
 #endregion

@@ -22,12 +22,12 @@ namespace PL_Console
 
             string[] infoUser = { us.UserAccount, us.UserName, us.UserEmail, us.UserPhoneNumber, us.UserBirthday.ToString(), us.UserGender };
 
-            var table = new ConsoleTable("DisplayName", us.UserAccount);
-            table.AddRow("UserNames", us.UserName);
+            var table = new ConsoleTable("Tên Hiển Thị", us.UserAccount);
+            table.AddRow("Tên Đăng Nhập", us.UserName);
             table.AddRow("Email", us.UserEmail);
-            table.AddRow("PhoneNumber", us.UserPhoneNumber);
-            table.AddRow("Birth Date", us.UserBirthday);
-            table.AddRow("Gender", us.UserGender);
+            table.AddRow("Số Điện Thoại", us.UserPhoneNumber);
+            table.AddRow("Ngày sinh", us.UserBirthday);
+            table.AddRow("Giới Tính", us.UserGender);
 
             table.Write();
             Console.WriteLine("===========================================");
@@ -42,7 +42,7 @@ namespace PL_Console
             short choice = -1;
             OrderBL orderBL = new OrderBL();
 
-            var table = new ConsoleTable("itemID", "itemName", "itemPrice", "itemSize", "itemResources"); // "itemNameEnglish",item.ItemNameEnglish,
+            var table = new ConsoleTable("ID", "Tên Đồ Uống", "Giá", "Size", "Nguyên Liệu"); // "itemNameEnglish",item.ItemNameEnglish,
             foreach (Item item in items)
             {
                 table.AddRow(item.ItemID, item.ItemName, FormatCurrency(item.ItemPrice), item.ItemSize, item.ItemResources);
@@ -51,7 +51,7 @@ namespace PL_Console
             table.Write();
             if (items.Count <= 0)
             {
-                Console.WriteLine("No product information found");
+                Console.WriteLine("Không tìm thấy thông tin sản phẩm");
             }
             ItemBL itemBL = new ItemBL();
 
@@ -63,7 +63,7 @@ namespace PL_Console
             Console.WriteLine("=========================================");
             try
             {
-                Console.Write("#Select: ");
+                Console.Write("#Lựa chọn: ");
                 choice = Int16.Parse(Console.ReadLine());
             }
             catch (System.Exception)
@@ -100,7 +100,7 @@ namespace PL_Console
             Console.WriteLine("=======================================");
             try
             {
-                Console.Write("#Select: ");
+                Console.Write("#Lựa chọn: ");
                 choose = Int16.Parse(Console.ReadLine());
             }
             catch (System.Exception)
@@ -113,7 +113,7 @@ namespace PL_Console
                 {
                     try
                     {
-                        Console.Write("#Please enter the correct selection: ");
+                        Console.Write("Vui lòng nhập đúng lựa chọn: ");
                         choose = Int16.Parse(Console.ReadLine());
                     }
                     catch (System.Exception)
@@ -157,7 +157,7 @@ namespace PL_Console
                 {
                     try
                     {
-                        Console.Write("#Please enter again: ");
+                        Console.Write("Vui lòng nhập lại: ");
                         ItemID = Int16.Parse(Console.ReadLine());
                         foreach (var item in items)
                         {
