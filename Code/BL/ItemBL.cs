@@ -57,19 +57,19 @@ namespace BL
             return itemDAL.GetItemByID(itemID);
         }
 
-        public Item GetItemBySize(string itemSize)
-        {
-            if (itemSize == null)
-            {
-                return null;
-            }
-            Regex regex = new Regex("[0-9]");
-            MatchCollection matchCollectionID = regex.Matches(itemSize.ToString());
-            if (matchCollectionID.Count < itemSize.ToString().Length)
-            {
-                return null;
-            }
-            return itemDAL.GetItemBySize(itemSize);
-        }
+        // public Item GetItemBySize(string itemSize)
+        // {
+        //     if (itemSize == null)
+        //     {
+        //         return null;
+        //     }
+        //     Regex regex = new Regex("[0-9]");
+        //     MatchCollection matchCollectionID = regex.Matches(itemSize.ToString());
+        //     if (matchCollectionID.Count < itemSize.ToString().Length)
+        //     {
+        //         return null;
+        //     }
+        //     return itemDAL.GetItemBySize(itemSize);
+        // }
     }
 }

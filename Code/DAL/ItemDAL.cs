@@ -22,7 +22,7 @@ namespace DAL
             }
             catch (System.Exception)
             {
-                Console.WriteLine("Khong the connection voi database");
+                Console.WriteLine("Không thể kết nối với database");
                 return null;
             }
             while (reader.Read())

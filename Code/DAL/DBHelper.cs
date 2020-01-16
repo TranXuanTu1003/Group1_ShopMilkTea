@@ -25,20 +25,20 @@ namespace DAL
 
                 return OpenConnection(connectionString);
             }
-            catch (System.Exception ex)
+            catch
             {
-                Console.WriteLine(ex.Message);
+                // Console.WriteLine(ex.Message);
                 return null;
             }
         }
 
-        public static MySqlConnection OpenConnection(string connection_String)
+        public static MySqlConnection OpenConnection(string connectionString)
         {
             try
             {
                 MySqlConnection connection = new MySqlConnection
                 {
-                    ConnectionString = connection_String
+                    ConnectionString = connectionString
                 };
                 connection.Open();
                 return connection;
@@ -70,5 +70,38 @@ namespace DAL
 
             return command.ExecuteNonQuery();
         }
+         public static bool ExecTransaction(List<string> queries)
+        {
+            bool result = false;
+            OpenConnection();
+            MySqlCommand command = connection.CreateCommand();
+            MySqlTransaction trans = connection.BeginTransaction();
+
+            command.Connection = connection;
+            command.Transaction = trans;
+            try
+            {
+                foreach (var query in queries)
+                {
+                    command.CommandText = query;
+                    command.ExecuteNonQuery();
+                }
+                trans.Commit();
+                result = true;
+            }
+            catch (System.Exception e)
+            {
+                result = false;
+                trans.Rollback();
+                Console.WriteLine(e);
+            }
+            finally
+            {
+                CloseConnection();
+            }
+
+            return result;
+        }
+
     }
 }

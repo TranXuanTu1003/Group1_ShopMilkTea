@@ -109,12 +109,12 @@ namespace DAL
             reader = command.ExecuteReader();
             if (reader.Read())
             {
-                Console.WriteLine("Account or email  already exists");
+                // Console.WriteLine("Account or email  already exists");
                 a = 1;
             }
             else
             {
-                Console.WriteLine("Registration successful");
+                // Console.WriteLine("Registration successful");
                 a = 2;
             }
             reader.Close();
@@ -134,7 +134,7 @@ namespace DAL
             }
             catch
             {
-                Console.WriteLine("could not be registered!");
+                // Console.WriteLine("could not be registered!");
             }
             finally
             {
